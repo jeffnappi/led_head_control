@@ -39,7 +39,6 @@ def Display(data):
 
 def Receive(data):
   global zero_count, time_last
-  time_last = time.time()
 
   if backup_mode:
     if sum(data) == 0:
@@ -47,12 +46,8 @@ def Receive(data):
       quit()
     backup.write(data[:NUM_PIXELS * PIXEL_SIZE])
 
-  if sum(data) == 0:
-    zero_count += 1
-    if zero_count > 30:
-      zero_count = 0
-      Display(GetBackup())
-  else:
+  if sum(data) != 0:
+    time_last = time.time()
     Display(data)
 
 def GetBackup():
@@ -65,9 +60,8 @@ def GetBackup():
 def CheckAlive():
   global time_last, wrapper
   if time.time() - time_last > 5:
-    empty_pixels = bytearray(NUM_PIXELS * PIXEL_SIZE)
     Display(GetBackup())
-    wrapper.AddEvent(10, CheckAlive)
+    wrapper.AddEvent(20, CheckAlive)
   else:
     wrapper.AddEvent(1000, CheckAlive)
 
