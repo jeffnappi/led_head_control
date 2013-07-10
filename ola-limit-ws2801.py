@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import sys
 import time
-import random
 import argparse
 from ola.ClientWrapper import ClientWrapper
 
@@ -17,7 +16,6 @@ AMP_LIMIT = 4.0
 GAMMA = bytearray(256)
 for i in range(256): GAMMA[i] = int(pow(float(i) / 255.0, 2.5) * 255.0)
 
-zero_count = 0
 
 def Display(data):
   spidev.flush()
@@ -82,6 +80,7 @@ backup_end = len(backup_data)
 
 spidev = file(SPI_DEVICE, "wb")
 universe = 1
+zero_count = 0
 wrapper = ClientWrapper()
 client = wrapper.Client()
 client.RegisterUniverse(universe, client.REGISTER, Receive)
