@@ -17,7 +17,12 @@ PIXEL_SIZE = 3
 LED_POWER = 0.02
 MAX_POWER = NUM_PIXELS * PIXEL_SIZE * LED_POWER
 MAX_BRIGHT = NUM_PIXELS * PIXEL_SIZE * 255.0
-SPI_DEVICE = "/dev/null" # "/dev/spidev0.0";
+
+if os.path.exists('/dev/spidev0.0'):
+  SPI_DEVICE = "/dev/spidev0.0";
+else:
+  SPI_DEVICE = "/dev/null"
+
 BACKUP_FILE = "save.out"
 AMP_LIMIT = 4.0
 
