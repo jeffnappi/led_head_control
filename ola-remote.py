@@ -108,11 +108,11 @@ class OlaThread(threading.Thread):
     self._client = self._wrapper.Client()
     self._client.RegisterUniverse(self._universe, self._client.REGISTER, self.Receive)
     if not self._backup_mode: self._wrapper.AddEvent(1000, self.CheckAlive)
-    self._wrapper.Run()
-    #try:
-    #except:
-    #  print "Error: Lost connection to OLAd!"
-    #  os._exit(1)
+    try:
+      self._wrapper.Run()
+    except:
+      print "Error: Lost connection to OLAd!"
+      os._exit(1)
 
   def Display(self, data):
     global LISTENERS, NUM_PIXELS, PIXEL_SIZE, GAMMA, MAX_BRIGHT, MAX_POWER
