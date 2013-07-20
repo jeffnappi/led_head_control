@@ -138,6 +138,7 @@ class OlaThread(threading.Thread):
     self._spidev.flush()
 
   def Receive(self, data):
+    self._time_last = time.time()
     if self._backup_mode:
       # if sum(data) == 0:
       #   print "Done saving."
@@ -146,9 +147,7 @@ class OlaThread(threading.Thread):
 
     if sum(data) == 0:
       self.Display(self.GetBackup())
-      time.sleep(1.0/30.0)
     else:
-      self._time_last = time.time()
       self.Display(data)
 
   def GetBackup(self):
