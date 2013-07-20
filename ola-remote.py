@@ -35,6 +35,29 @@ class OlaHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
 
+class BackupHandler(tornado.web.RequestHandler):
+    def get(self, action):
+      global ola_thread
+      action = self.get_argument('action', 'none')
+      if action == 'start':
+        self.write('recording')
+        print "backup recording started"
+        ola_thread._backup.close()
+        ola_thread._backup = open(BACKUP_FILE,'wb')
+        ola_thread._backup_mode = True
+      elif action == 'stop':
+        print "backup recording stopped"
+        ola_thread._backup.close()
+        ola_thread._backup = open(BACKUP_FILE,'r')
+        ola_thread._backup_data = bytearray(ola_thread._backup.read())
+        ola_thread._backup_end = len(ola_thread._backup_data)
+        ola_thread._backup_pos = 0
+        ola_thread._backup_mode = False
+        self.write('idle')
+      else:
+        self.write('invalid command')
+
+
 class RealtimeHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         LISTENERS.append(self)
@@ -53,6 +76,7 @@ settings = {
 
 application = tornado.web.Application([
     (r'/', OlaHandler),
+    (r'/backup/(.*)', BackupHandler),
     (r'/realtime/', RealtimeHandler),
     (r'/(.*)', tornado.web.StaticFileHandler, {"path": os.path.join(os.path.dirname(__file__), 'web')})
 ], **settings)
@@ -115,9 +139,9 @@ class OlaThread(threading.Thread):
 
   def Receive(self, data):
     if self._backup_mode:
-      if sum(data) == 0:
-        print "Done saving."
-        quit()
+      # if sum(data) == 0:
+      #   print "Done saving."
+      #   quit()
       self._backup.write(data[:NUM_PIXELS * PIXEL_SIZE])
 
     if sum(data) == 0:

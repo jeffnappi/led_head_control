@@ -1,7 +1,7 @@
 /* inspired by http://www.bitstorm.it/blog/en/2011/05/3d-sphere-html5-canvas/ */
 var sphere = new Sphere3D();
 var rotation = 0;
-var distance = 0;
+var distance = 1000;
 var x_rotate = 0;
 var y_rotate = 0;
 var z_rotate = 0;

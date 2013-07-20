@@ -13,17 +13,34 @@
 
     body {
       background-color: black;
+      color: white;
+      font-family: sans;
     }
     </style>
 </head>
 <body>
     <canvas id="sphere3d" width="550" height="550"></canvas>
-    <button id="reset">Reset</button>
-    <button id="reset">Record</button>
-    <div id="output"></div>
+    <button id="reset">Reset Sim</button>
+    <button id="record" data-action="start">Start Recording</button>
+    <span id="output">idle</span>
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function(){
           display_init();
+          $record = $('#record');
+          var record_action = ''
+          $record.click(function(e) {
+            var record_action = $record.attr('data-action');
+            $.get('/backup/?action=' + record_action, function(data) {
+              $('#output').html(data);
+            });
+            if (record_action == 'stop') {
+              $record.html('Start Recording');
+              $record.attr('data-action', 'start');
+            } else {
+              $record.html('Stop Recording');
+              $record.attr('data-action', 'stop');
+            }
+          });
         });
     </script>
 </body>
