@@ -5,7 +5,9 @@ var distance = 0;
 var x_rotate = 0;
 var y_rotate = 0;
 var z_rotate = 0;
+var debug_enabled = false;
 var manual_control = false;
+var autorotate_timeout = 30;
 
 // patch
 var valueVertexMap ={0:231,3:232,6:233,9:234,12:235,15:236,18:237,21:238,24:239,27:240,30:241,33:242,36:243,39:244,42:206,45:205,48:204,51:203,54:202,57:201,60:200,63:199,66:198,69:197,72:196,75:195,78:194,81:193,84:154,87:155,90:156,93:157,96:158,99:159,102:160,105:161,108:162,111:163,114:164,117:165,120:166,123:167,126:168,129:169,132:131,135:130,138:129,141:128,144:127,147:126,150:125,153:124,156:123,159:122,162:121,165:120,168:119,171:118,174:117,177:116,180:78,183:79,186:80,189:81,192:82,195:83,198:84,201:85,204:86,207:87,210:88,213:89,216:90,219:91,222:92,225:93,228:55,231:54,234:53,237:52,240:51,243:50,246:49,249:48,252:47,255:46,258:45,261:44,264:43,267:42,270:41,273:40,276:2,279:3,282:4,285:5,288:6,291:7,294:8,297:9,300:10,303:11,306:12,309:13,312:14,315:15,318:16,321:17,324:359,327:358,330:357,333:356,336:355,339:354,342:353,345:352,348:351,351:350,354:349,357:348,360:347,363:346,366:345,369:344,372:383,375:384,378:385,381:386,384:387,387:388,390:389,393:390,396:391,399:392,402:393,405:394,408:395,411:396,414:433,417:432,420:431,423:430,426:429,429:428,432:427,435:426,438:425,441:424,444:423,447:422,450:461,453:462,456:463,459:464,462:465,465:466,468:467,471:468,474:469,477:470,480:507,483:506,486:505,489:504,492:503,495:502,498:501,501:500};
@@ -112,14 +114,18 @@ function render() {
     }
     ctx.restore();
     ctx.fillStyle = "rgb(150,150,150)";
-    ctx.fillText("@jeffnappi", width - 90, height - 5);
+    if (debug_enabled) {
+      ctx.fillText('dist: ' + distance + ' rot: ' + rotation.toFixed(2) + ' xrot: ' + x_rotate.toFixed(2) + ' yrot: ' + y_rotate.toFixed(2) + " @jeffnappi", width - 250, height - 5);
+    } else {
+      ctx.fillText(" @jeffnappi", width - 90, height - 5);
+    }
     if (!manual_control) {
-        if (distance < 1000) {
-            distance += 10;
-            rotation += Math.PI / 90.0;
-        } else if (rotation > 0) {
-            rotation -= Math.PI / 90.0;
-        }
+      if (distance < 1000) {
+        distance += 10;
+        rotation += Math.PI / 90.0;
+      } else if (rotation > 0) {
+        rotation -= Math.PI / 90.0;
+      }
     }
 }
 
@@ -159,8 +165,6 @@ function valueMap(values) {
 }
 
 function display_init() {
-    // Set framerate to 30 fps
-    //setInterval(render, 1000); // / 30a
     $('#reset').click(function() {
         manual_control = false;
         distance = rotation = x_rotate = y_rotate = z_rotate = 0;
@@ -218,12 +222,15 @@ function display_init() {
       alert("WebSocket not supported");
     }
 
-    setInterval(function() {
-        if (!manual_control) {
-            rotation = Math.PI;
-        }
-    }, 30000);
+    if (autorotate_timeout!=0 && autorotate_timeout != undefined) {
+      setInterval(function() {
+          if (!manual_control) {
+              rotation = Math.PI;
+          }
+      }, 1000 * autorotate_timeout);
+    }
 
+  // Set framerate to 30 fps
     setInterval(function () {
         render();
     }, 1000/30 );
