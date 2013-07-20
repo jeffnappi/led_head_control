@@ -69,11 +69,21 @@ class OlaThread(threading.Thread):
 
     self._backup_end = len(self._backup_data)
     self._spidev = file(SPI_DEVICE, "wb")
-    self._wrapper = ClientWrapper()
+
+    try:
+      self._wrapper = ClientWrapper()
+    except:
+      print "Error: OLAd not running!"
+      os._exit(1)
+
     self._client = self._wrapper.Client()
     self._client.RegisterUniverse(self._universe, self._client.REGISTER, self.Receive)
     if not self._backup_mode: self._wrapper.AddEvent(1000, self.CheckAlive)
-    self._wrapper.Run()
+    try:
+      self._wrapper.Run()
+    except:
+      print "Error: Lost connection to OLAd!"
+      os._exit(1)
 
   def Display(self, data):
     global LISTENERS, NUM_PIXELS, PIXEL_SIZE, GAMMA, MAX_BRIGHT, MAX_POWER
@@ -107,6 +117,7 @@ class OlaThread(threading.Thread):
 
     if sum(data) == 0:
       self.Display(self.GetBackup())
+      time.sleep(1.0/30.0)
     else:
       self._time_last = time.time()
       self.Display(data)
