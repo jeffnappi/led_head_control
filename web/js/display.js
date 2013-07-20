@@ -192,7 +192,7 @@ function display_init() {
 
     if ("WebSocket" in window) {
       var ws_url = 'ws://localhost:8888/realtime/';
-      if (location.protocol == 'http' || location.protocol == 'https') {
+      if (location.protocol == 'http:' || location.protocol == 'https:') {
         ws_url = location.origin.replace('http','ws') + "/realtime/";
       }
       var ws = new WebSocket(ws_url);
