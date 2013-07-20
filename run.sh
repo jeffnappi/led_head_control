@@ -1,8 +1,10 @@
 #!/bin/bash
-cd /home/pi/ola_limit_ws2801
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo $DIR
+cd $DIR
 while [ 0 ];
 do
-  ./ola-limit-ws2801.py > /dev/null 2>/dev/null
+  ./ola-remote.py > /dev/null 2>/dev/null
   sleep 5
   sudo /etc/init.d/olad restart
 done
