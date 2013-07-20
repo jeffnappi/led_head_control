@@ -1,5 +1,7 @@
 #!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd /home/pi/led_head_control
+
 echo "running from $DIR"
 while [ 0 ];
 do
