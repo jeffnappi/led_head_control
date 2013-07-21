@@ -189,6 +189,7 @@ function display_init() {
 
     var values = [];
     var frame = 0;
+    var last_source = '';
 
     if ("WebSocket" in window) {
       var ws_url = 'ws://localhost:8888/realtime/';
@@ -198,8 +199,12 @@ function display_init() {
       var ws = new WebSocket(ws_url);
       ws.onopen = function() {};
       ws.onmessage = function (evt) {
-          var values = JSON.parse(evt.data);
-          valueMap(values);
+          var message = JSON.parse(evt.data);
+          if (message.source != last_source) {
+            $('#source').html(message.source);
+            last_source = message.source;
+          }
+          valueMap(message.data);
       };
       ws.onclose = function() {};
     } else {

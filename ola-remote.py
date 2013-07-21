@@ -17,6 +17,7 @@ PIXEL_SIZE = 3
 LED_POWER = 0.02
 MAX_POWER = NUM_PIXELS * PIXEL_SIZE * LED_POWER
 MAX_BRIGHT = NUM_PIXELS * PIXEL_SIZE * 255.0
+SOURCES = ['OLA','Backup']
 
 if os.path.exists('/dev/spidev0.0'):
   SPI_DEVICE = "/dev/spidev0.0";
@@ -84,6 +85,7 @@ application = tornado.web.Application([
 class OlaThread(threading.Thread):
 
   def run(self):
+    self._source = 0
     self._backup_pos = 0
     self._backup_mode = True if len(sys.argv) > 1 and sys.argv[1] == "-b" else False
     self._time_last = time.time()
@@ -115,11 +117,11 @@ class OlaThread(threading.Thread):
       os._exit(1)
 
   def Display(self, data):
-    global LISTENERS, NUM_PIXELS, PIXEL_SIZE, GAMMA, MAX_BRIGHT, MAX_POWER
+    global LISTENERS, NUM_PIXELS, PIXEL_SIZE, GAMMA, MAX_BRIGHT, MAX_POWER, SOURCES
 
     self._spidev.flush()
     for listener in LISTENERS:
-      listener.write_message(json.dumps(list(data)))
+      listener.write_message(json.dumps({'source': SOURCES[self._source], 'data': list(data)}))
 
     pixel_values = bytearray(NUM_PIXELS * PIXEL_SIZE)
 
@@ -146,8 +148,10 @@ class OlaThread(threading.Thread):
       self._backup.write(data[:NUM_PIXELS * PIXEL_SIZE])
 
     if sum(data) == 0:
+      self._source = 1
       self.Display(self.GetBackup())
     else:
+      self._source = 0
       self.Display(data)
 
   def GetBackup(self):
@@ -159,6 +163,7 @@ class OlaThread(threading.Thread):
   # check to see if we are receiving data. if not play backup
   def CheckAlive(self):
     if time.time() - self._time_last > 5:
+      self._source = 1
       self.Display(self.GetBackup())
       self._wrapper.AddEvent(1000/30, self.CheckAlive)
     else:
