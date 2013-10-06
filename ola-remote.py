@@ -19,7 +19,7 @@ MAX_BRIGHT = NUM_PIXELS * PIXEL_SIZE * 255.0
 SOURCES = ['OLA', 'Backup']
 
 if os.path.exists('/dev/spidev0.0'):
-    SPI_DEVICE = "/dev/spidev0.0";
+    SPI_DEVICE = "/dev/spidev0.0"
 else:
     SPI_DEVICE = "/dev/null"
 
@@ -27,7 +27,8 @@ BACKUP_FILE = "save.out"
 AMP_LIMIT = 4.0
 
 GAMMA = bytearray(256)
-for i in range(256): GAMMA[i] = int(pow(float(i) / 255.0, 2.5) * 255.0)
+for i in range(256):
+    GAMMA[i] = int(pow(float(i) / 255.0, 2.5) * 255.0)
 
 root = os.path.dirname(__file__)
 
