@@ -4,47 +4,47 @@
     <title>LED Globe Console</title>
     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="js/display.js"></script>
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="icon" type="image/png" href="favicon.png"/>
     <style>
-      canvas {
-      background: black;
-      display: block;
-    }
+        canvas {
+            background: black;
+            display: block;
+        }
 
-    body {
-      background-color: black;
-      color: white;
-      font-family: sans;
-    }
+        body {
+            background-color: black;
+            color: white;
+            font-family: sans-serif;
+        }
     </style>
 </head>
 <body>
-    <canvas id="sphere3d" width="550" height="550"></canvas>
-    <button id="reset">Reset Sim</button>
-    <button id="record" data-action="start">Start Recording</button>
-    <span>Status: </span>
-    <span id="output">idle</span>
-    <span>| Source: </span>
-    <span id="source">None</span>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function(){
-          display_init();
-          $record = $('#record');
-          var record_action = ''
-          $record.click(function(e) {
-            var record_action = $record.attr('data-action');
-            $.get('/backup/?action=' + record_action, function(data) {
-              $('#output').html(data);
+<canvas id="sphere3d" width="550" height="550"></canvas>
+<button id="reset">Reset Sim</button>
+<button id="record" data-action="start">Start Recording</button>
+<span>Status: </span>
+<span id="output">idle</span>
+<span>| Source: </span>
+<span id="source">None</span>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        display_init();
+        var $record = $('#record');
+        var record_action = '';
+        $record.on('click', function () {
+            record_action = $record.attr('data-action');
+            $.get('/backup/?action=' + record_action, function (data) {
+                $('#output').html(data);
             });
             if (record_action == 'stop') {
-              $record.html('Start Recording');
-              $record.attr('data-action', 'start');
+                $record.html('Start Recording');
+                $record.attr('data-action', 'start');
             } else {
-              $record.html('Stop Recording');
-              $record.attr('data-action', 'stop');
+                $record.html('Stop Recording');
+                $record.attr('data-action', 'stop');
             }
-          });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
