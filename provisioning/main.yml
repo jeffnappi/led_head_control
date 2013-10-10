@@ -12,7 +12,9 @@
     ap_ssid: LEDHelmet
     ap_psk: openlighting
     ip_subnet: 192.168.222
+    push: False
 
   tasks:
     - include: playbooks/base.yml
+      when: not push
     - include: playbooks/push.yml
