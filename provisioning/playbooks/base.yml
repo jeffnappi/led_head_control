@@ -15,6 +15,12 @@
         - isc-dhcp-server
         - hostapd
 
+  - name: configure ola defaults
+    template: src=templates/etc/default/ola dest=/etc/default/ola owner=root group=root
+
+  - name: ensure olad starts on boot
+    service: name=olad enabled=yes state=started
+
   - name: download hostapd binary for RTl8192cu
     command: wget -q https://www.adafruit.com/downloads/adafruit_hostapd.zip -O /root/adafruit_hostapd.zip creates=/root/adafruit_hostapd.zip
 

@@ -1,0 +1,7 @@
+# Defaults for ola initscript (/etc/init.d/ola)
+# This is a POSIX shell fragment
+
+# [automatically edited by postinst, do not change line format ]
+
+# ola daemon switch. If set to true, olad will run.
+RUN_DAEMON="true"
