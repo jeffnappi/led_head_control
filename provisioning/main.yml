@@ -1,0 +1,18 @@
+---
+
+# this playbook should be ran against a raspberry pi connected via ethernet
+# the AP setup is for the RTl8192cu chipset (e.g. Edimax EW-7811Un)
+
+- gather_facts: False
+  user: pi
+  sudo: yes
+  hosts: pi
+
+  vars:
+    ap_ssid: LEDHelmet
+    ap_psk: openlighting
+    ip_subnet: 192.168.222
+
+  tasks:
+    - include: playbooks/base.yml
+    - include: playbooks/push.yml

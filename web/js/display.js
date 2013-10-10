@@ -33,12 +33,12 @@ function Point3D() {
     this.color = "";
 }
 
-function Sphere3D(radius) {
+function Sphere3D(size) {
     this.point = [];
-    this.radius = (typeof (radius) == "undefined") ? 25.0 : radius;
-    this.radius = (typeof (radius) != "number") ? 25.0 : radius;
+    this.radius = (typeof (size) == "undefined") ? 25.0 : size;
+    this.radius = (typeof (size) != "number") ? 25.0 : size;
     this.numberOfVertexes = 0;
-    var p, direction, beta, radius, fixedY;
+    var p, direction, alpha, beta, radius, fixedY;
 
     for (alpha = 0; alpha <= 6.11; alpha += 0.165) {
         p = this.point[this.numberOfVertexes] = new Point3D();
@@ -54,7 +54,7 @@ function Sphere3D(radius) {
         for (beta = 0.17; beta < 1.445; beta += 0.165) {
             radius = Math.cos(beta) * this.radius;
             fixedY = Math.sin(beta) * this.radius * direction;
-            for (var alpha = 0; alpha < 6.11; alpha += 0.165) {
+            for (alpha = 0; alpha < 6.11; alpha += 0.165) {
                 p = this.point[this.numberOfVertexes] = new Point3D();
                 p.x = Math.cos(alpha) * radius;
                 p.y = fixedY;
@@ -103,7 +103,7 @@ function render() {
     ctx.clearRect(0, 0, width, height);
 
     ctx.globalCompositeOperation = "lighter";
-    for (i = 0; i < sphere.numberOfVertexes; i++) {
+    for (var i = 0; i < sphere.numberOfVertexes; i++) {
 
         p.x = sphere.point[i].x;
         p.y = sphere.point[i].y;

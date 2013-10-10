@@ -1,0 +1,17 @@
+---
+
+  - name: configure hostapd
+    template: src=templates/etc/hostapd/hostapd.conf dest=/etc/hostapd/hostapd.conf
+
+  - name: configure hostapd defaults
+    template: src=templates/etc/default/hostapd dest=/etc/default/hostapd
+
+  - name: configure dhcpd
+    template: src=templates/etc/dhcp/dhcpd.conf dest=/etc/dhcp/dhcpd.conf
+
+  - name: configure dhcpd defaults
+    template: src=templates/etc/default/isc-dhcp-server dest=/etc/default/isc-dhcp-server
+
+  - name: recursively copy files over (must run from provisioning folder)
+    local_action: command rsync -avzp --rsync-path="sudo rsync" --delete --filter=':- .gitignore' --exclude .gitignore --exclude .git -e 'ssh -o "StrictHostKeyChecking no"' ../. pi@${inventory_hostname}:/home/pi/led_head_control
+    sudo: no

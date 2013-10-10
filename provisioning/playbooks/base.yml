@@ -1,0 +1,22 @@
+---
+
+  - name: add package pre-reqs
+    command: apt-get install -y python-apt python-pycurl
+
+  - name: add ola repository
+    apt_repository: repo='deb http://apt.openlighting.org/raspbian wheezy main'
+
+  - name: install required packages
+    apt: pkg=$item update_cache=yes force=yes
+    with_items:
+        - ola
+        - ola-python
+        - isc-dhcp-server
+        - hostapd
+
+  - name: download hostapd binary for RTl8192cu
+    command: wget -q https://www.adafruit.com/downloads/adafruit_hostapd.zip -O /root/adafruit_hostapd.zip creates=/root/adafruit_hostapd.zip
+
+  - name: install hostapd binary
+    command: unzip -o /root/adafruit_hostapd.zip hostapd -d /usr/sbin
+
