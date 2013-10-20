@@ -1,0 +1,39 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          led-boot
+# Required-Start:    kmod
+# Required-Stop:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Run LED Boot Animation
+### END INIT INFO
+
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+do_start() {
+	if [ -x /home/pi/led_head_control/boot.py ]; then
+	        [ "$VERBOSE" != no ] && log_begin_msg "Running led boot animation"
+		/home/pi/led_head_control/boot.py &
+		return 0
+	fi
+}
+
+case "$1" in
+    start)
+	do_start
+        ;;
+    restart|reload|force-reload)
+        echo "Error: argument '$1' not supported" >&2
+        exit 3
+        ;;
+    stop)
+        ;;
+    *)
+        echo "Usage: $0 start|stop" >&2
+        exit 3
+        ;;
+esac

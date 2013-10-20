@@ -16,12 +16,6 @@
         - hostapd
         - supervisor
 
-  - name: configure ola defaults
-    template: src=templates/etc/default/ola dest=/etc/default/ola owner=root group=root
-
-  - name: ensure olad does not start on boot
-    service: name=olad enabled=yes state=started
-
   - name: download hostapd binary for RTl8192cu
     command: wget -q https://www.adafruit.com/downloads/adafruit_hostapd.zip -O /root/adafruit_hostapd.zip creates=/root/adafruit_hostapd.zip
 
@@ -30,34 +24,4 @@
 
   - name: make hostapd executable
     file: path=/usr/sbin/hostapd mode=755
-
-  - name: ensure hostapd does not start on boot
-    service: name=hostapd enabled=no state=stopped
-
-  - name: ensure isc-dhcp-server does not start on boot
-    service: name=isc-dhcp-server enabled=no state=stopped
-
-  - name: configure network interfaces
-    template: src=templates/etc/network/interfaces dest=/etc/network/interfaces owner=root group=root
-
-  - name: configure wpa_supplicant
-    template: src=templates/etc/wpa_supplicant/wpa_supplicant.conf dest=/etc/wpa_supplicant/wpa_supplicant.conf owner=root group=root
-
-  - name: configure hostapd
-    template: src=templates/etc/hostapd/hostapd.conf dest=/etc/hostapd/hostapd.conf owner=root group=root
-
-  - name: configure hostapd defaults
-    template: src=templates/etc/default/hostapd dest=/etc/default/hostapd owner=root group=root
-
-  - name: configure dhcpd
-    template: src=templates/etc/dhcp/dhcpd.conf dest=/etc/dhcp/dhcpd.conf owner=root group=root
-
-  - name: configure dhcpd defaults
-    template: src=templates/etc/default/isc-dhcp-server dest=/etc/default/isc-dhcp-server owner=root group=root
-
-  - name: install network boot script
-    template: src=templates/etc/wifi_setup.sh dest=/etc/wifi_setup.sh owner=root group=root mode=755
-
-  - name: configure supervisor
-    template: src=templates/etc/supervisor/conf.d/led_helmet.conf dest=/etc/supervisor/conf.d/led_helmet.conf owner=root group=root mode=644
 
