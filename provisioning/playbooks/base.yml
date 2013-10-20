@@ -14,11 +14,12 @@
         - python-tornado
         - isc-dhcp-server
         - hostapd
+        - supervisor
 
   - name: configure ola defaults
     template: src=templates/etc/default/ola dest=/etc/default/ola owner=root group=root
 
-  - name: ensure olad starts on boot
+  - name: ensure olad does not start on boot
     service: name=olad enabled=yes state=started
 
   - name: download hostapd binary for RTl8192cu
@@ -55,5 +56,8 @@
     template: src=templates/etc/default/isc-dhcp-server dest=/etc/default/isc-dhcp-server owner=root group=root
 
   - name: install network boot script
-    template: src=templates/etc/rc.local dest=/etc/rc.local owner=root group=root mode=755
+    template: src=templates/etc/wifi_setup.sh dest=/etc/wifi_setup.sh owner=root group=root mode=755
+
+  - name: configure supervisor
+    template: src=templates/etc/supervisor/conf.d/led_helmet.conf dest=/etc/supervisor/conf.d/led_helmet.conf owner=root group=root mode=644
 

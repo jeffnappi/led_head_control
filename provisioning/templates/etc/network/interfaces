@@ -11,3 +11,7 @@ iface eth0 inet dhcp
 # use manual ip configuration for wlan0 interface and allow hotplug as well
 allow-hotplug wlan0
 iface wlan0 inet manual
+    up ifconfig $IFACE 0.0.0.0 up
+    up /etc/wifi_setup.sh
+    down ifconfig $IFACE down
+
