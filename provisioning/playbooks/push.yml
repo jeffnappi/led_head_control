@@ -39,7 +39,7 @@
     template: src=templates/etc/init.d/led-boot dest=/etc/init.d/led-boot owner=root group=root mode=755
 
   - name: ensure boot animation is active
-    service: name=led-boot enabled=yes
+    command: update-rc.d led-boot defaults
 
   - name: recursively copy files over (must run from provisioning folder)
     local_action: command rsync -avzp --rsync-path="sudo rsync" --delete --filter=':- .gitignore' --exclude provisioning --exclude .gitignore --exclude .git -e 'ssh -o "StrictHostKeyChecking no"' ../. pi@${inventory_hostname}:/home/pi/led_head_control

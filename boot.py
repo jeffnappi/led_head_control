@@ -29,6 +29,7 @@ backup_data = bytearray(backup.read())
 backup_end = len(backup_data)
 spidev = file(SPI_DEVICE, "wb")
 
+
 def Display(data):
     spidev.flush()
 
